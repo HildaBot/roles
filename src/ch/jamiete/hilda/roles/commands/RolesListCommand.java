@@ -21,8 +21,12 @@ import com.google.gson.JsonElement;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
+import ch.jamiete.hilda.commands.CommandManager;
 import ch.jamiete.hilda.configuration.Configuration;
 import ch.jamiete.hilda.roles.RolesPlugin;
+import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.MessageBuilder.Formatting;
+import net.dv8tion.jda.core.MessageBuilder.SplitPolicy;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -49,20 +53,22 @@ public class RolesListCommand extends ChannelSubCommand {
             return;
         }
 
-        final StringBuilder sb = new StringBuilder();
+        final MessageBuilder mb = new MessageBuilder();
         final Iterator<JsonElement> iterator = array.iterator();
+
+        mb.append("Roles", Formatting.UNDERLINE).append("\n");
+        mb.append("Use ").append(CommandManager.PREFIX + "giveme <role>", Formatting.BOLD).append(" to get any of these roles:\n");
 
         while (iterator.hasNext()) {
             final Role role = message.getGuild().getRoleById(iterator.next().getAsString());
 
             if (role != null) {
-                sb.append('\n');
-                sb.append(role.getName() + ", ");
+                mb.append('\n');
+                mb.append(role.getName());
             }
         }
 
-        sb.setLength(sb.length() - 2);
-        this.reply(message, "I can give the following roles: " + sb.toString());
+        mb.buildAll(SplitPolicy.NEWLINE).forEach(m -> message.getTextChannel().sendMessage(m).queue());
     }
 
 }
