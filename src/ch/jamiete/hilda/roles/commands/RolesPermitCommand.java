@@ -15,9 +15,8 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
-import java.util.Iterator;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
@@ -56,31 +55,11 @@ public class RolesPermitCommand extends ChannelSubCommand {
             array = new JsonArray();
         }
 
-        final Iterator<JsonElement> iterator = array.iterator();
-
-        Role find = null;
-        JsonElement element = null;
-
-        while (iterator.hasNext()) {
-            element = iterator.next();
-            find = message.getGuild().getRoleById(element.getAsString());
-
-            if (find == null) {
-                continue;
-            }
-
-            if (find == role) {
-                break;
-            }
-
-            find = null;
-        }
-
-        if (find == null) {
+        if (!array.contains(new JsonPrimitive(role.getId()))) {
             array.add(role.getId());
             this.reply(message, "Added " + role.getName() + " to role list!");
         } else {
-            array.remove(element);
+            array.remove(new JsonPrimitive(role.getId()));
             this.reply(message, "Removed " + role.getName() + " from role list!");
         }
 
