@@ -56,6 +56,7 @@ public class RolesListCommand extends ChannelSubCommand {
             final Role role = message.getGuild().getRoleById(iterator.next().getAsString());
 
             if (role != null) {
+                sb.append('\n');
                 sb.append(role.getName() + ", ");
             }
         }
