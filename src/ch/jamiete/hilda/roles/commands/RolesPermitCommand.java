@@ -49,6 +49,11 @@ public class RolesPermitCommand extends ChannelSubCommand {
         final Role role = message.getGuild().getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(arguments[0])).findFirst().orElse(null);
         final Configuration cfg = this.plugin.getHilda().getConfigurationManager().getConfiguration(this.plugin, message.getGuild().getId());
 
+        if (role == null) {
+            this.reply(message, "I couldn't find that role.");
+            return;
+        }
+
         JsonArray array = cfg.get().getAsJsonArray("roles");
 
         if (array == null) {
