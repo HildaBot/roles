@@ -86,10 +86,10 @@ public class RolesGiveCommand extends ChannelSubCommand {
 
         if (member.getRoles().contains(role)) {
             message.getGuild().getController().removeRolesFromMember(member, role).queue();
-            this.reply(message, "I've removed " + role.getName() + " from you!");
+            this.reply(message, "OK " + message.getAuthor().getAsMention() + ", I've removed " + role.getName() + " from you!");
         } else {
             message.getGuild().getController().addRolesToMember(member, role).queue();
-            this.reply(message, "I've given " + role.getName() + " to you!");
+            this.reply(message, "OK " + message.getAuthor().getAsMention() + ", I've given " + role.getName() + " to you!");
         }
     }
 
