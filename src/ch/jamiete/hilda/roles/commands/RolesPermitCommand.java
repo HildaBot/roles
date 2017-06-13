@@ -18,6 +18,7 @@ package ch.jamiete.hilda.roles.commands;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import ch.jamiete.hilda.Hilda;
+import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
 import ch.jamiete.hilda.configuration.Configuration;
@@ -46,7 +47,7 @@ public class RolesPermitCommand extends ChannelSubCommand {
             return;
         }
 
-        final Role role = message.getGuild().getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(arguments[0])).findFirst().orElse(null);
+        final Role role = message.getGuild().getRoles().stream().filter(r -> r.getName().equalsIgnoreCase(Util.combineSplit(0, arguments, " "))).findFirst().orElse(null);
         final Configuration cfg = this.plugin.getHilda().getConfigurationManager().getConfiguration(this.plugin, message.getGuild().getId());
 
         if (role == null) {

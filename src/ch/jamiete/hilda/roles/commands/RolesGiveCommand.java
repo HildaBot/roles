@@ -19,6 +19,7 @@ import java.util.Iterator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import ch.jamiete.hilda.Hilda;
+import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
 import ch.jamiete.hilda.configuration.Configuration;
@@ -72,7 +73,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
                 continue;
             }
 
-            if (role.getName().toLowerCase().equalsIgnoreCase(arguments[0])) {
+            if (role.getName().toLowerCase().equalsIgnoreCase(Util.combineSplit(0, arguments, " "))) {
                 break;
             }
 
