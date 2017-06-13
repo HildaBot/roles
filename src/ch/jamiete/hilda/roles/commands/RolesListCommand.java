@@ -15,18 +15,16 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
-import java.util.Iterator;
+import java.awt.Color;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
 import ch.jamiete.hilda.commands.CommandManager;
 import ch.jamiete.hilda.configuration.Configuration;
 import ch.jamiete.hilda.roles.RolesPlugin;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.MessageBuilder.Formatting;
-import net.dv8tion.jda.core.MessageBuilder.SplitPolicy;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -53,22 +51,19 @@ public class RolesListCommand extends ChannelSubCommand {
             return;
         }
 
-        final MessageBuilder mb = new MessageBuilder();
-        final Iterator<JsonElement> iterator = array.iterator();
+        final EmbedBuilder eb = new EmbedBuilder();
 
-        mb.append("Roles", Formatting.UNDERLINE).append("\n");
-        mb.append("Use ").append(CommandManager.PREFIX + "giveme <role>", Formatting.BOLD).append(" to get any of these roles:\n");
+        eb.setTitle("Server roles");
+        eb.setDescription("Use **" + CommandManager.PREFIX + "giveme <role>** to get any of these roles:");
+        eb.setColor(Color.decode("#0A564D"));
 
-        while (iterator.hasNext()) {
-            final Role role = message.getGuild().getRoleById(iterator.next().getAsString());
-
-            if (role != null) {
-                mb.append('\n');
-                mb.append(role.getName());
+        for (Role role : message.getGuild().getRoles()) {
+            if (array.contains(new JsonPrimitive(role.getId()))) {
+                eb.addField(role.getName(), "", true);
             }
         }
 
-        mb.buildAll(SplitPolicy.NEWLINE).forEach(m -> message.getTextChannel().sendMessage(m).queue());
+        this.reply(message, eb.build());
     }
 
 }
