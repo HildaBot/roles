@@ -46,7 +46,7 @@ public class RolesListCommand extends ChannelSubCommand {
 
         final JsonArray array = cfg.get().getAsJsonArray("roles");
 
-        if (array == null) {
+        if (array == null || array != null && array.size() < 1) {
             this.reply(message, "I can't give any roles!");
             return;
         }
@@ -54,14 +54,17 @@ public class RolesListCommand extends ChannelSubCommand {
         final EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle("Server roles");
-        eb.setDescription("Use **" + CommandManager.PREFIX + "giveme <role>** to get any of these roles:");
         eb.setColor(Color.decode("#0A564D"));
+
+        eb.getDescriptionBuilder().append("Say **" + CommandManager.PREFIX + "giveme <role>** to get any of these roles:\n\n");
 
         for (Role role : message.getGuild().getRoles()) {
             if (array.contains(new JsonPrimitive(role.getId()))) {
-                eb.addField(role.getName(), "", true);
+                eb.getDescriptionBuilder().append(role.getName() + ", ");
             }
         }
+
+        eb.getDescriptionBuilder().setLength(eb.getDescriptionBuilder().length() - 2);
 
         this.reply(message, eb.build());
     }
