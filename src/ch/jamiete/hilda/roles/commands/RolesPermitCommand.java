@@ -63,7 +63,15 @@ public class RolesPermitCommand extends ChannelSubCommand {
 
         if (!array.contains(new JsonPrimitive(role.getId()))) {
             array.add(role.getId());
-            this.reply(message, "Added " + role.getName() + " to role list!");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Added " + role.getName() + " to role list!");
+
+            if (!message.getGuild().getSelfMember().canInteract(role)) {
+                sb.append(" Note, however, that I can't interact with that role. You will need to move my role above it for me to be able to give it to users. Alternatively, you may give me administrator permissions.");
+            }
+
+            this.reply(message, sb.toString());
         } else {
             array.remove(new JsonPrimitive(role.getId()));
             this.reply(message, "Removed " + role.getName() + " from role list!");

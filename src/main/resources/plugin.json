@@ -1,6 +1,6 @@
 {
     "name": "roles",
     "mainClass": "ch.jamiete.hilda.roles.RolesPlugin",
-    "version": "1.0.2",
+    "version": "${pom.version}",
     "author": "jamietech"
 }
