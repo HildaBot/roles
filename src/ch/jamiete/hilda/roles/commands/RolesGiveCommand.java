@@ -15,9 +15,6 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
-import java.util.Iterator;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
@@ -28,6 +25,9 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import java.util.Iterator;
 
 public class RolesGiveCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -49,7 +49,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
         }
 
         if (arguments.length == 0) {
-            this.usage(message, "<role>");
+            this.usage(message, "<role>", label);
             return;
         }
 
@@ -64,6 +64,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
 
         final Iterator<JsonElement> iterator = array.iterator();
 
+        String sought = Util.combineSplit(0, arguments, " ").trim();
         Role role = null;
 
         while (iterator.hasNext()) {
@@ -73,7 +74,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
                 continue;
             }
 
-            if (role.getName().toLowerCase().equalsIgnoreCase(Util.combineSplit(0, arguments, " "))) {
+            if (role.getName().toLowerCase().equalsIgnoreCase(sought)) {
                 break;
             }
 
