@@ -15,9 +15,6 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
-import java.awt.Color;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonPrimitive;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
@@ -27,6 +24,9 @@ import ch.jamiete.hilda.roles.RolesPlugin;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
+import java.awt.Color;
 
 public class RolesListCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -56,7 +56,7 @@ public class RolesListCommand extends ChannelSubCommand {
         eb.setTitle("Server roles");
         eb.setColor(Color.decode("#0A564D"));
 
-        eb.getDescriptionBuilder().append("Say **" + CommandManager.PREFIX + "giveme <role>** to get any of these roles:\n\n");
+        eb.getDescriptionBuilder().append("Say **" + CommandManager.PREFIX + "giveme <role>** to get (or remove) any of these roles:\n\n");
 
         for (Role role : message.getGuild().getRoles()) {
             if (array.contains(new JsonPrimitive(role.getId()))) {
