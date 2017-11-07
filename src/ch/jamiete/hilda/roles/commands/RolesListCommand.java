@@ -83,7 +83,11 @@ public class RolesListCommand extends ChannelSubCommand {
         }
 
         if (!roles.isEmpty()) {
-            eb.addField(name == null ? "Roles" : name, Util.getAsList(roles), false);
+            if (name == null) {
+                eb.getDescriptionBuilder().append(Util.getAsList(roles));
+            } else {
+                eb.addField(name, Util.getAsList(roles), false);
+            }
         }
 
         this.reply(message, eb.build());
