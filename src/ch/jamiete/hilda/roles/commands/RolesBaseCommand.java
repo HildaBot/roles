@@ -15,13 +15,13 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.roles.RolesPlugin;
 import net.dv8tion.jda.core.entities.Message;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RolesBaseCommand extends ChannelSeniorCommand {
 
@@ -34,6 +34,7 @@ public class RolesBaseCommand extends ChannelSeniorCommand {
 
         this.registerSubcommand(new RolesGiveCommand(hilda, this, plugin));
         this.registerSubcommand(new RolesListCommand(hilda, this, plugin));
+        this.registerSubcommand(new RolesPermitAllCommand(hilda, this, plugin));
         this.registerSubcommand(new RolesPermitCommand(hilda, this, plugin));
     }
 
