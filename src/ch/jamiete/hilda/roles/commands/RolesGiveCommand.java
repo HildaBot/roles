@@ -106,13 +106,22 @@ public class RolesGiveCommand extends ChannelSubCommand {
 
         }
 
-        if (!message.getGuild().getSelfMember().canInteract(role)) {
-            this.reply(message, "I can't do that. Please ask a server administrator to modify the order of the roles.");
-            return;
-        }
-
         List<Role> add = new ArrayList<>();
         List<Role> remove = new ArrayList<>();
+
+        for (Role r : add) {
+            if (!message.getGuild().getSelfMember().canInteract(r)) {
+                this.reply(message, "I can't do that. Please ask a server administrator to modify the order of the roles.");
+                return;
+            }
+        }
+
+        for (Role r : remove) {
+            if (!message.getGuild().getSelfMember().canInteract(r)) {
+                this.reply(message, "I can't do that. Please ask a server administrator to modify the order of the roles.");
+                return;
+            }
+        }
 
         if (member.getRoles().contains(role)) {
             remove.add(role);
