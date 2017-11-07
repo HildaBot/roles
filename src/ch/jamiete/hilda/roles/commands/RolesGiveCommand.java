@@ -27,7 +27,10 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
 
 public class RolesGiveCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -86,18 +89,60 @@ public class RolesGiveCommand extends ChannelSubCommand {
             return;
         }
 
+        String category = null;
+        List<Role> roles = message.getGuild().getRoles();
+
+        for (int i = roles.indexOf(role); i > 0; i--) {
+            Role r = roles.get(i);
+            Matcher matcher = RolesPlugin.PATTERN.matcher(r.getName());
+
+            if (matcher.matches()) {
+                if (matcher.group(2) != null) {
+                    category = matcher.group(1).trim();
+                }
+
+                break;
+            }
+
+        }
+
         if (!message.getGuild().getSelfMember().canInteract(role)) {
             this.reply(message, "I can't do that. Please ask a server administrator to modify the order of the roles.");
             return;
         }
 
+        List<Role> add = new ArrayList<>();
+        List<Role> remove = new ArrayList<>();
+
         if (member.getRoles().contains(role)) {
-            message.getGuild().getController().removeRolesFromMember(member, role).reason("I took this role from the user because they asked me to. If you don't want them to have access to this role, please remove it from the roles list.").queue();
-            this.reply(message, "OK " + message.getAuthor().getAsMention() + ", I've removed " + role.getName() + " from you!");
+            remove.add(role);
         } else {
-            message.getGuild().getController().addRolesToMember(member, role).reason("I gave this role to the user because they asked me to. If you don't want them to have access to this role, please remove it from the roles list.").queue();
-            this.reply(message, "OK " + message.getAuthor().getAsMention() + ", I've given " + role.getName() + " to you!");
+            add.add(role);
         }
+
+        if (category != null) {
+            remove.addAll(RolesPlugin.getRoles(message.getGuild(), category));
+
+            if (!add.isEmpty()) {
+                remove.remove(add.get(0));
+            }
+        }
+
+        message.getGuild().getController().modifyMemberRoles(member, add, remove).reason("I performed this action because the user asked me to. If you don't want the user to have access to any role granted, please remove it or them from the permitted roles list.").queue();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("OK, I've ");
+
+        if (!add.isEmpty()) {
+            sb.append("given ").append(add.get(0).getName()).append(" to");
+        } else {
+            sb.append("removed ").append(remove.get(0).getName()).append(" from");
+        }
+
+        sb.append(" you!");
+
+        this.reply(message, sb.toString());
     }
 
 }

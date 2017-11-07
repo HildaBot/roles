@@ -16,6 +16,7 @@
 package ch.jamiete.hilda.roles.commands;
 
 import ch.jamiete.hilda.Hilda;
+import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
 import ch.jamiete.hilda.commands.CommandManager;
@@ -27,6 +28,9 @@ import net.dv8tion.jda.core.entities.Role;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
 
 public class RolesListCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -46,7 +50,7 @@ public class RolesListCommand extends ChannelSubCommand {
 
         final JsonArray array = cfg.get().getAsJsonArray("roles");
 
-        if (array == null || array != null && array.size() < 1) {
+        if (array == null || array.size() < 1) {
             this.reply(message, "I can't give any roles!");
             return;
         }
@@ -56,15 +60,31 @@ public class RolesListCommand extends ChannelSubCommand {
         eb.setTitle("Server roles");
         eb.setColor(Color.decode("#0A564D"));
 
-        eb.getDescriptionBuilder().append("Say **" + CommandManager.PREFIX + "giveme <role>** to get (or remove) any of these roles:\n\n");
+        eb.setDescription("Say **" + CommandManager.PREFIX + "giveme <role>** to get (or remove) any of these roles:\n\n");
+
+        String name = null;
+        List<String> roles = new ArrayList<>();
 
         for (Role role : message.getGuild().getRoles()) {
+            Matcher matcher = RolesPlugin.PATTERN.matcher(role.getName());
+
+            if (matcher.matches()) {
+                if (!roles.isEmpty()) {
+                    eb.addField(name == null ? "Roles" : name, Util.getAsList(roles), false);
+                    roles.clear();
+                }
+
+                name = matcher.group(1).trim();
+            }
+
             if (array.contains(new JsonPrimitive(role.getId()))) {
-                eb.getDescriptionBuilder().append(role.getName() + ", ");
+                roles.add(Util.sanitise(role.getName()));
             }
         }
 
-        eb.getDescriptionBuilder().setLength(eb.getDescriptionBuilder().length() - 2);
+        if (!roles.isEmpty()) {
+            eb.addField(name == null ? "Roles" : name, Util.getAsList(roles), false);
+        }
 
         this.reply(message, eb.build());
     }

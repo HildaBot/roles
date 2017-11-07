@@ -18,8 +18,15 @@ package ch.jamiete.hilda.roles;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.plugins.HildaPlugin;
 import ch.jamiete.hilda.roles.commands.RolesBaseCommand;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RolesPlugin extends HildaPlugin {
+    public static final Pattern PATTERN = Pattern.compile("===\\[(.*)\\]===([Ee])?");
 
     public RolesPlugin(final Hilda hilda) {
         super(hilda);
@@ -28,6 +35,32 @@ public class RolesPlugin extends HildaPlugin {
     @Override
     public void onEnable() {
         this.getHilda().getCommandManager().registerChannelCommand(new RolesBaseCommand(this.getHilda(), this));
+    }
+
+    /**
+     * Gets a list of {@link Role}s that match the category name.
+     * @param guild The Guild against whom to test roles.
+     * @param category The category which is sought.
+     * @return A (possibly empty) list of Roles that match the category name.
+     */
+    public static List<Role> getRoles(Guild guild, String category) {
+        List<Role> roles = new ArrayList<>();
+        boolean adding = false;
+
+        for (Role role : guild.getRoles()) {
+            Matcher matcher = PATTERN.matcher(role.getName());
+
+            if (matcher.matches()) {
+                adding = matcher.group(1).trim().equalsIgnoreCase(category);
+                continue;
+            }
+
+            if (adding) {
+                roles.add(role);
+            }
+        }
+
+        return roles;
     }
 
 }
