@@ -15,6 +15,10 @@
  */
 package ch.jamiete.hilda.roles.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
@@ -25,10 +29,6 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonPrimitive;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RolesPermitAllCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -50,9 +50,8 @@ public class RolesPermitAllCommand extends ChannelSubCommand {
             return;
         }
 
-        String name = Util.combineSplit(0, arguments, " ");
-        boolean adding = false;
-        List<Role> roles = RolesPlugin.getRoles(message.getGuild(), name);
+        final String name = Util.combineSplit(0, arguments, " ");
+        final List<Role> roles = RolesPlugin.getRoles(message.getGuild(), name);
 
         if (roles.isEmpty()) {
             this.reply(message, "I couldn't find any roles matching that category.");
@@ -67,12 +66,12 @@ public class RolesPermitAllCommand extends ChannelSubCommand {
             array = new JsonArray();
         }
 
-        List<String> added = new ArrayList<>();
-        List<String> ignored = new ArrayList<>();
-        List<String> issues = new ArrayList<>();
+        final List<String> added = new ArrayList<>();
+        final List<String> ignored = new ArrayList<>();
+        final List<String> issues = new ArrayList<>();
 
-        for (Role role : roles) {
-            String rname = role == null ? null : Util.sanitise(role.getName());
+        for (final Role role : roles) {
+            final String rname = role == null ? null : Util.sanitise(role.getName());
 
             if (!array.contains(new JsonPrimitive(role.getId()))) {
                 array.add(role.getId());
@@ -84,7 +83,7 @@ public class RolesPermitAllCommand extends ChannelSubCommand {
                         issues.add(rname);
                     }
                 }
-            } else if (role != null){
+            } else if (role != null) {
                 ignored.add(rname);
             }
         }
@@ -92,7 +91,7 @@ public class RolesPermitAllCommand extends ChannelSubCommand {
         cfg.get().add("roles", array);
         cfg.save();
 
-        MessageBuilder mb = new MessageBuilder();
+        final MessageBuilder mb = new MessageBuilder();
         mb.append("OK, ");
 
         if (added.isEmpty()) {

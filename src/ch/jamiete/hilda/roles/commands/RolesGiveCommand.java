@@ -15,6 +15,12 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
@@ -25,12 +31,6 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
 
 public class RolesGiveCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -67,7 +67,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
 
         final Iterator<JsonElement> iterator = array.iterator();
 
-        String sought = Util.combineSplit(0, arguments, " ").trim();
+        final String sought = Util.combineSplit(0, arguments, " ").trim();
         Role role = null;
 
         while (iterator.hasNext()) {
@@ -90,11 +90,11 @@ public class RolesGiveCommand extends ChannelSubCommand {
         }
 
         String category = null;
-        List<Role> roles = message.getGuild().getRoles();
+        final List<Role> roles = message.getGuild().getRoles();
 
         for (int i = roles.indexOf(role); i > 0; i--) {
-            Role r = roles.get(i);
-            Matcher matcher = RolesPlugin.PATTERN.matcher(r.getName());
+            final Role r = roles.get(i);
+            final Matcher matcher = RolesPlugin.PATTERN.matcher(r.getName());
 
             if (matcher.matches()) {
                 if (matcher.group(2) != null) {
@@ -106,17 +106,17 @@ public class RolesGiveCommand extends ChannelSubCommand {
 
         }
 
-        List<Role> add = new ArrayList<>();
-        List<Role> remove = new ArrayList<>();
+        final List<Role> add = new ArrayList<>();
+        final List<Role> remove = new ArrayList<>();
 
-        for (Role r : add) {
+        for (final Role r : add) {
             if (!message.getGuild().getSelfMember().canInteract(r)) {
                 this.reply(message, "I can't do that. Please ask a server administrator to modify the order of the roles.");
                 return;
             }
         }
 
-        for (Role r : remove) {
+        for (final Role r : remove) {
             if (!message.getGuild().getSelfMember().canInteract(r)) {
                 this.reply(message, "I can't do that. Please ask a server administrator to modify the order of the roles.");
                 return;
@@ -139,7 +139,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
 
         message.getGuild().getController().modifyMemberRoles(member, add, remove).reason("I performed this action because the user asked me to. If you don't want the user to have access to any role granted, please remove it or them from the permitted roles list.").queue();
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
         sb.append("OK, I've ");
 

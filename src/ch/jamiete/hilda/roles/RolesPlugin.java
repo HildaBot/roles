@@ -15,27 +15,18 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.plugins.HildaPlugin;
 import ch.jamiete.hilda.roles.commands.RolesBaseCommand;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RolesPlugin extends HildaPlugin {
     public static final Pattern PATTERN = Pattern.compile("===\\[(.*)\\]===([Ee])?");
-
-    public RolesPlugin(final Hilda hilda) {
-        super(hilda);
-    }
-
-    @Override
-    public void onEnable() {
-        this.getHilda().getCommandManager().registerChannelCommand(new RolesBaseCommand(this.getHilda(), this));
-    }
 
     /**
      * Gets a list of {@link Role}s that match the category name.
@@ -43,12 +34,12 @@ public class RolesPlugin extends HildaPlugin {
      * @param category The category which is sought.
      * @return A (possibly empty) list of Roles that match the category name.
      */
-    public static List<Role> getRoles(Guild guild, String category) {
-        List<Role> roles = new ArrayList<>();
+    public static List<Role> getRoles(final Guild guild, final String category) {
+        final List<Role> roles = new ArrayList<>();
         boolean adding = false;
 
-        for (Role role : guild.getRoles()) {
-            Matcher matcher = PATTERN.matcher(role.getName());
+        for (final Role role : guild.getRoles()) {
+            final Matcher matcher = RolesPlugin.PATTERN.matcher(role.getName());
 
             if (matcher.matches()) {
                 adding = matcher.group(1).trim().equalsIgnoreCase(category);
@@ -61,6 +52,15 @@ public class RolesPlugin extends HildaPlugin {
         }
 
         return roles;
+    }
+
+    public RolesPlugin(final Hilda hilda) {
+        super(hilda);
+    }
+
+    @Override
+    public void onEnable() {
+        this.getHilda().getCommandManager().registerChannelCommand(new RolesBaseCommand(this.getHilda(), this));
     }
 
 }

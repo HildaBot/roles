@@ -15,6 +15,12 @@
  *******************************************************************************/
 package ch.jamiete.hilda.roles.commands;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.Util;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
@@ -25,12 +31,6 @@ import ch.jamiete.hilda.roles.RolesPlugin;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonPrimitive;
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
 
 public class RolesListCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -63,10 +63,10 @@ public class RolesListCommand extends ChannelSubCommand {
         eb.setDescription("Say **" + CommandManager.PREFIX + "giveme <role>** to get (or remove) any of these roles:\n\n");
 
         String name = null;
-        List<String> roles = new ArrayList<>();
+        final List<String> roles = new ArrayList<>();
 
-        for (Role role : message.getGuild().getRoles()) {
-            Matcher matcher = RolesPlugin.PATTERN.matcher(role.getName());
+        for (final Role role : message.getGuild().getRoles()) {
+            final Matcher matcher = RolesPlugin.PATTERN.matcher(role.getName());
 
             if (matcher.matches()) {
                 if (!roles.isEmpty()) {

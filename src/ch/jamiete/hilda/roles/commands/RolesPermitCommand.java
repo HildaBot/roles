@@ -64,7 +64,7 @@ public class RolesPermitCommand extends ChannelSubCommand {
         if (!array.contains(new JsonPrimitive(role.getId()))) {
             array.add(role.getId());
 
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             sb.append("Added " + role.getName() + " to role list!");
 
             if (!message.getGuild().getSelfMember().canInteract(role)) {
