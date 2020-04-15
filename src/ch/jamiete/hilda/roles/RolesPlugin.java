@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.plugins.HildaPlugin;
 import ch.jamiete.hilda.roles.commands.RolesBaseCommand;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 
 public class RolesPlugin extends HildaPlugin {
     public static final Pattern PATTERN = Pattern.compile("===\\[(.*)\\]===([Ee])?");

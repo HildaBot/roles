@@ -21,7 +21,7 @@ import java.util.List;
 import ch.jamiete.hilda.Hilda;
 import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.roles.RolesPlugin;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 public class RolesBaseCommand extends ChannelSeniorCommand {
 
@@ -29,7 +29,7 @@ public class RolesBaseCommand extends ChannelSeniorCommand {
         super(hilda);
 
         this.setName("roles");
-        this.setAliases(Arrays.asList(new String[] { "giverole", "getrole", "giveme", "iam" }));
+        this.setAliases(Arrays.asList("giverole", "getrole", "giveme", "iam"));
         this.setDescription("Manages the giving of roles.");
 
         this.registerSubcommand(new RolesGiveCommand(hilda, this, plugin));
@@ -41,12 +41,12 @@ public class RolesBaseCommand extends ChannelSeniorCommand {
     @Override
     public void execute(final Message message, String[] arguments, String label) {
         if (this.hasAlias(label)) {
-            final List<String> newargs = new ArrayList<String>();
+            final List<String> newargs = new ArrayList<>();
             newargs.add("give");
             newargs.addAll(Arrays.asList(arguments));
 
             label = "roles";
-            arguments = newargs.toArray(new String[newargs.size()]);
+            arguments = newargs.toArray(new String[0]);
         }
 
         super.execute(message, arguments, label);

@@ -23,9 +23,9 @@ import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
 import ch.jamiete.hilda.configuration.Configuration;
 import ch.jamiete.hilda.roles.RolesPlugin;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 
 public class RolesPermitCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -65,7 +65,7 @@ public class RolesPermitCommand extends ChannelSubCommand {
             array.add(role.getId());
 
             final StringBuilder sb = new StringBuilder();
-            sb.append("Added " + role.getName() + " to role list!");
+            sb.append("Added ").append(role.getName()).append(" to role list!");
 
             if (!message.getGuild().getSelfMember().canInteract(role)) {
                 sb.append(" Note, however, that I can't interact with that role. You will need to move my role above it for me to be able to give it to users. Alternatively, you may give me administrator permissions.");

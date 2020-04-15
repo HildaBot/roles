@@ -27,10 +27,10 @@ import ch.jamiete.hilda.commands.ChannelSeniorCommand;
 import ch.jamiete.hilda.commands.ChannelSubCommand;
 import ch.jamiete.hilda.configuration.Configuration;
 import ch.jamiete.hilda.roles.RolesPlugin;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 
 public class RolesGiveCommand extends ChannelSubCommand {
     private final RolesPlugin plugin;
@@ -137,7 +137,7 @@ public class RolesGiveCommand extends ChannelSubCommand {
             }
         }
 
-        message.getGuild().getController().modifyMemberRoles(member, add, remove).reason("I performed this action because the user asked me to. If you don't want the user to have access to any role granted, please remove it or them from the permitted roles list.").queue();
+        message.getGuild().modifyMemberRoles(member, add, remove).reason("I performed this action because the user asked me to. If you don't want the user to have access to any role granted, please remove it or them from the permitted roles list.").queue();
 
         final StringBuilder sb = new StringBuilder();
 
